@@ -4,67 +4,65 @@ import { Tree } from "./Tree";
 import { Road } from "./Road";
 import { Car } from "./Car";
 import { Truck } from "./Truck";
+import { generateMap } from "../utilities/generateMap";
 
-export const metadata = [
-    {
-        type : "truck",
-        direction : true,
-        speed : 0,
-        vehicles: [{ initialTileIndex : -4, color : 0x00ff00 }],
-    },{
-        type  : "car", 
-        direction : false,
-        speed : 1,
-        vehicles : [{ initialTileIndex : 2, color : 0xff0000 }],
-
-    },{
-        type  : "tree",
-        trees : [
-            { tileIndex : -3, height : 50 },
-            { tileIndex : 2,  height : 30 },
-            { tileIndex : 5,  height : 50 },
-        ],
-    },
-];
-
+export const metadata = [];
 export const map = new THR.Group();
 
 export function addRows() {
-    metadata.forEach((row,i) => {
-        if (row.type === "tree") {
+    const newMetadata = generateMap(20);
+    const startIndex = metadata.length;
+
+    metadata.push(...newMetadata);
+
+    newMetadata.forEach((row,i) => {
+        const rowIndex = startIndex + i + 1;
+
+        if (row.type === "forest") {
+            const forest_row = Grass(rowIndex);
+
             row.trees.forEach(({ tileIndex, height }) => {
-                Grass(i + 1).add(Tree(tileIndex, height));
+                forest_row.add(Tree(tileIndex, height));
             })
+
+            map.add(forest_row);
         } 
         if (row.type === "car") {
+            const car_row = Road(rowIndex);
+
             row.vehicles.forEach((vehicle) => {
                 const car = Car(
                     vehicle.initialTileIndex,
                     row.direction,
                     vehicle.color
                 );
-
-                Road(i + 1).add(car);
+                vehicle.ref = car;
+                car_row.add(car);
             });
 
-            map.add(Road(i + 1));
+            map.add(car_row);
         }
         if (row.type === "truck") {
+            const truck_row = Road(rowIndex);
+
             row.vehicles.forEach((vehicle) => {
                 const truck = Truck(
                     vehicle.initialTileIndex,
                     row.direction,
                     vehicle.color
                 );
-                Road(i + 1).add(truck);
+                vehicle.ref = truck;
+                truck_row.add(truck);
             });
-            map.add(Road(i + 1));
+            map.add(truck_row);
         }
     });
 }
 
 export function renderMap() {
-    for (let ri = 0; ri > -5; ri--) {
+    metadata.length = 0;
+
+    for (let ri = 0; ri > -10; ri--) {
         map.add(Grass(ri));
     }
 

@@ -13,6 +13,8 @@ export function Car(initialTileIndex, direction, color) {
     );
 
     main.position.z = 12;
+    main.castShadow = true;
+    main.receiveShadow = true;
     car.add(main);
 
     const cabin = new THR.Mesh(
@@ -25,6 +27,8 @@ export function Car(initialTileIndex, direction, color) {
 
     cabin.position.x = -6;
     cabin.position.z = 25.5;
+    cabin.castShadow = true;
+    cabin.receiveShadow = true;
     car.add(cabin);
 
     const frontWheel = Wheel(18);

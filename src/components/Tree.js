@@ -24,6 +24,9 @@ export function Tree(tileIndex, height) {
     );
 
     crown.position.z = height / 2 + 20;
+    crown.castShadow = true;
+    crown.receiveShadow = true;
+    
     tree.add(crown);
 
     return tree;

@@ -12,6 +12,7 @@ export function Renderer() {
 
     render.setPixelRatio(window.devicePixelRatio);
     render.setSize(window.innerWidth, window.innerHeight);
+    render.shadowMap.enabled = true;
 
     return render;
 }
